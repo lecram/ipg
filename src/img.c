@@ -9,7 +9,7 @@
 int
 main(int argc, char *argv[])
 {
-    IplImage *image;
+    IplImage *image = NULL;
     char *infile, *outfile;
     Matrix matrix;
     Args args;
