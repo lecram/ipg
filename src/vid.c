@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <opencv/cv.>
+#include <opencv/cv.h>
 #include <opencv/highgui.h>
 
 #include "ipg.h"
