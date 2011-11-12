@@ -44,14 +44,12 @@ main(int argc, char *argv[])
     frame_count = 0;
     t0 = cvGetTickCount();
     while ((src_frame = cvQueryFrame(capture)) != NULL) {
-        printf(".");
         cvCopy(src_frame, dst_frame, NULL);
         matrix.data = (unsigned char *) dst_frame->imageData;
         proc(&matrix, &args);
         cvWriteFrame(writer, dst_frame);
         frame_count++;
     }
-    puts("");
     t1 = cvGetTickCount();
     tps = cvGetTickFrequency() * 1.0e6;
     deltatime = (double) (t1 - t0) / tps;
