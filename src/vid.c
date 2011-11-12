@@ -19,9 +19,12 @@ main(int argc, char *argv[])
     CvVideoWriter *writer;
     CvSize size;
     double fps;
+    int frame_count;
 
     infile = argv[1];
     outfile = argv[2];
+    args.c = argc - 3;
+    args.v = argv + 3;
     capture = cvCaptureFromFile(infile);
     if (capture == NULL) {
         printf("Could not load video \"%s\".\n", infile);
@@ -36,12 +39,25 @@ main(int argc, char *argv[])
     writer = cvCreateVideoWriter(outfile, CV_FOURCC('M', 'J', 'P', 'G'), fps, size, 1);
     printf("Saving to \"%s\".", outfile);
     dst_frame = cvCreateImage(size, IPL_DEPTH_8U, 3);
+    matrix.width = dst_frame->width;
+    matrix.height = dst_frame->height;
+    frame_count = 0;
+    t0 = cvGetTickCount();
     while ((src_frame = cvQueryFrame(capture)) != NULL) {
         printf(".");
-        /* ToDo: copy src_frame to dst_frame and call transformation. */
+        cvCopy(src_frame, dst_frame, NULL);
+        matrix.data = (unsigned char *) dst_frame->imageData;
+        proc(&matrix, &args);
         cvWriteFrame(writer, dst_frame);
+        frame_count++;
     }
     puts("");
+    t1 = cvGetTickCount();
+    tps = cvGetTickFrequency() * 1.0e6;
+    deltatime = (double) (t1 - t0) / tps;
+    printf("%d frames of %dx%d processed in %.3f seconds.\n",
+           frame_count, dst_frame->width, dst_frame->height,
+           deltatime);
     cvReleaseVideoWriter(&writer);
     cvReleaseImage(&dst_frame);
     cvReleaseCapture(&capture);
