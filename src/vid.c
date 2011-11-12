@@ -10,7 +10,7 @@ int
 main(int argc, char *argv[])
 {
     CvCapture *capture = NULL;
-    IplImage *src_frame, *dst_frame;
+    IplImage *src_frame, *image, *dst_frame;
     char *infile, *outfile;
     Matrix matrix;
     Args args;
@@ -37,16 +37,18 @@ main(int argc, char *argv[])
         (int) cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT)
     );
     writer = cvCreateVideoWriter(outfile, CV_FOURCC('M', 'J', 'P', 'G'), fps, size, 1);
-    printf("Saving to \"%s\".", outfile);
+    printf("Saving to \"%s\"...\n", outfile);
+    image = cvCreateImage(size, IPL_DEPTH_8U, 1);
     dst_frame = cvCreateImage(size, IPL_DEPTH_8U, 3);
     matrix.width = dst_frame->width;
     matrix.height = dst_frame->height;
     frame_count = 0;
     t0 = cvGetTickCount();
     while ((src_frame = cvQueryFrame(capture)) != NULL) {
-        cvCopy(src_frame, dst_frame, NULL);
-        matrix.data = (unsigned char *) dst_frame->imageData;
+        cvCvtColor(src_frame, image, CV_BGR2GRAY);
+        matrix.data = (unsigned char *) image->imageData;
         proc(&matrix, &args);
+        cvCvtColor(image, dst_frame, CV_GRAY2BGR);
         cvWriteFrame(writer, dst_frame);
         frame_count++;
     }
