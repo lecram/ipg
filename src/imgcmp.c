@@ -46,12 +46,12 @@ main(int argc, char *argv[])
     img_a = img_b = NULL;
     img_a = cvLoadImage(argv[1], CV_LOAD_IMAGE_GRAYSCALE);
     if (img_a == NULL) {
-        printf("Could not load image \"%s\".", argv[1]);
+        printf("Could not load image \"%s\".\n", argv[1]);
         return EXIT_FAILURE;
     }
     img_b = cvLoadImage(argv[2], CV_LOAD_IMAGE_GRAYSCALE);
     if (img_b == NULL) {
-        printf("Could not load image \"%s\".", argv[2]);
+        printf("Could not load image \"%s\".\n", argv[2]);
         return EXIT_FAILURE;
     }
 

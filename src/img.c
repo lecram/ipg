@@ -20,7 +20,7 @@ main(int argc, char *argv[])
     outfile = argv[2];
     image = cvLoadImage(infile, CV_LOAD_IMAGE_GRAYSCALE);
     if (image == NULL) {
-        printf("Could not load image \"%s\".", infile);
+        printf("Could not load image \"%s\".\n", infile);
         return EXIT_FAILURE;
     }
     matrix.data = (unsigned char *) image->imageData;
