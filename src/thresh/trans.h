@@ -3,6 +3,9 @@
 #define KEEP_ABOVE 2
 #define KEEP_BOTH  3
 
+#ifdef __cplusplus
+extern "C"
+#endif
 void thresh(Matrix *matrix, unsigned char threshold,
             unsigned char below, unsigned char above,
             int keep);

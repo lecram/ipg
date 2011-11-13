@@ -27,6 +27,7 @@ thresh_pixel(unsigned char *img, int width, int height,
     }
 }
 
+extern "C"
 void
 thresh(Matrix *matrix, unsigned char threshold,
        unsigned char below, unsigned char above,
