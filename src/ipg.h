@@ -6,7 +6,7 @@ typedef struct {
 
 typedef struct {
     int c;
-    char **v;
+    char *v[32];
 } Args;
 
 void proc(Matrix *matrix, Args *args);
