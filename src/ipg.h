@@ -10,3 +10,5 @@ typedef struct {
 } Args;
 
 void proc(Matrix *matrix, Args *args);
+
+#define N 2
