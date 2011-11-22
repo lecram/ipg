@@ -1,6 +1,5 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
