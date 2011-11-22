@@ -36,8 +36,8 @@ thresh(Matrix *matrix, unsigned char threshold,
     unsigned char *d_img;
     size_t size;
     dim3 threadsPerBlock(16, 16);
-    dim3 numBlocks(matrix->width / threadsPerBlock.x,
-                   matrix->height / threadsPerBlock.y);
+    dim3 numBlocks((matrix->width + threadsPerBlock.x - 1) / threadsPerBlock.x,
+                   (matrix->height + threadsPerBlock.y - 1) / threadsPerBlock.y);
 
     size = matrix->width * matrix->height;
     cudaMalloc((void **) &d_img, size);
