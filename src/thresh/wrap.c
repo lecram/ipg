@@ -29,7 +29,7 @@ proc(Matrix *matrix, Args *args)
 }
 
 void
-procN(Matrix *matrix[], Args *args)
+procN(Matrix *matrix, Args *args)
 {
     double threshold, below, above;
     unsigned char uc_threshold, uc_below, uc_above;

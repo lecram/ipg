@@ -26,28 +26,31 @@ thresh(Matrix *matrix, unsigned char threshold,
 }
 
 void
-threshN(Matrix *matrix[], unsigned char threshold,
+threshN(Matrix *matrix, unsigned char threshold,
         unsigned char below, unsigned char above,
         int keep)
 {
     int x, y;
     int offset;
+    int zoffset;
     int i;
 
+    zoffset = 0;
     for (i = 0; i < N; i++) {
-        for (y = 0; y < matrix[i]->height; y++) {
-            for (x = 0; x < matrix[i]->width; x++) {
-                offset = y * matrix[i]->width + x;
+        for (y = 0; y < matrix->height; y++) {
+            for (x = 0; x < matrix->width; x++) {
+                offset = zoffset + y * matrix->width + x;
 
-                if (matrix[i]->data[offset] <= threshold) {
+                if (matrix->data[offset] <= threshold) {
                     if (!(keep & KEEP_BELOW))
-                        matrix[i]->data[offset] = below;
+                        matrix->data[offset] = below;
                 }
                 else {
                     if (!(keep & KEEP_ABOVE))
-                        matrix[i]->data[offset] = above;
+                        matrix->data[offset] = above;
                 }
             }
         }
+        zoffset += matrix->width * matrix->height;
     }
 }
