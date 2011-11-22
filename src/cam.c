@@ -26,7 +26,7 @@ main(int argc, char *argv[])
     int64 t0, t1;
 
     args.c = argc - 1;
-    args.v = argv + 1;
+    args.v[0] = argv[1];
     capture = cvCaptureFromCAM(CV_CAP_ANY);
     if (capture == NULL) {
         puts("Could not capture from webcam.");

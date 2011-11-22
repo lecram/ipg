@@ -20,11 +20,13 @@ main(int argc, char *argv[])
     CvSize size;
     double fps;
     int frame_count;
+    int i;
 
     infile = argv[1];
     outfile = argv[2];
     args.c = argc - 3;
-    args.v = argv + 3;
+    for (i = 0; i < 3; i++)
+        args.v[i] = argv[i + 3];
     capture = cvCaptureFromFile(infile);
     if (capture == NULL) {
         printf("Could not load video \"%s\".\n", infile);
