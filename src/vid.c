@@ -38,7 +38,7 @@ main(int argc, char *argv[])
         (int) cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_WIDTH),
         (int) cvGetCaptureProperty(capture, CV_CAP_PROP_FRAME_HEIGHT)
     );
-    writer = cvCreateVideoWriter(outfile, CV_FOURCC('M', 'J', 'P', 'G'), fps, size, 1);
+    writer = cvCreateVideoWriter(outfile, CV_FOURCC('I', '4', '2', '0'), fps, size, 1);
     printf("Saving to \"%s\"...\n", outfile);
     image = cvCreateImage(size, IPL_DEPTH_8U, 1);
     dst_frame = cvCreateImage(size, IPL_DEPTH_8U, 3);
