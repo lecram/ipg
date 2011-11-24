@@ -11,7 +11,7 @@ int
 main(int argc, char *argv[])
 {
     CvCapture *capture = NULL;
-    IplImage *src_frame, *image, *dst_frame;
+    IplImage *src_frame, *image[N], *dst_frame;
     char *infile, *outfile;
     Matrix matrix;
     Args args;
@@ -41,23 +41,35 @@ main(int argc, char *argv[])
     );
     writer = cvCreateVideoWriter(outfile, CV_FOURCC('M', 'J', 'P', 'G'), fps, size, 1);
     printf("Saving to \"%s\"...\n", outfile);
-    image = cvCreateImage(size, IPL_DEPTH_8U, 1);
+    for (i = 0; i < N; i++)
+        image[i] = cvCreateImage(size, IPL_DEPTH_8U, 1);
     dst_frame = cvCreateImage(size, IPL_DEPTH_8U, 3);
     matrix.width = dst_frame->width;
     matrix.height = dst_frame->height;
     matrix.data = (unsigned char *) malloc(matrix.width * matrix.height * N * sizeof(unsigned char));
     frame_count = 0;
     t0 = cvGetTickCount();
-    while ((src_frame = cvQueryFrame(capture)) != NULL) {
-        cvCvtColor(src_frame, image, CV_BGR2GRAY);
-        memcpy(matrix.data + matrix.width * matrix.height * (frame_count % N),
-               image->imageData,
-               matrix.width * matrix.height);
-        frame_count++;
-        if (frame_count % N == 0)
-            procN(&matrix, &args);
-        cvCvtColor(image, dst_frame, CV_GRAY2BGR);
-        cvWriteFrame(writer, dst_frame);
+    while (1) {
+        for (i = 0; i < N; i++) {
+            src_frame = cvQueryFrame(capture);
+            if (src_frame == NULL)
+                break;
+            cvCvtColor(src_frame, image[i], CV_BGR2GRAY);
+            memcpy(matrix.data + matrix.width * matrix.height * i,
+                   image[i]->imageData,
+                   matrix.width * matrix.height);
+        }
+        if (src_frame == NULL)
+            break;
+        frame_count += N;
+        procN(&matrix, &args);
+        for (i = 0; i < N; i++) {
+            memcpy(image[i]->imageData,
+                   matrix.data + matrix.width * matrix.height * i,
+                   matrix.width * matrix.height);
+            cvCvtColor(image[i], dst_frame, CV_GRAY2BGR);
+            cvWriteFrame(writer, dst_frame);
+        }
     }
     t1 = cvGetTickCount();
     tps = cvGetTickFrequency() * 1.0e6;
