@@ -25,7 +25,8 @@ main(int argc, char *argv[])
     cvNamedWindow(infile, 1);
     while ((frame = cvQueryFrame(capture)) != NULL) {
         cvShowImage(infile, frame);
-        cvWaitKey(wait);
+        if(cvWaitKey(wait) != -1)
+            break;
     }
     cvReleaseCapture(&capture);
     cvDestroyWindow(infile);
