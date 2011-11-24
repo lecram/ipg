@@ -22,6 +22,8 @@ main(int argc, char *argv[])
     double fps;
     int frame_count;
     int i;
+    int data_size;
+    unsigned char *mdata;
 
     infile = argv[1];
     outfile = argv[2];
@@ -47,28 +49,33 @@ main(int argc, char *argv[])
     matrix.width = dst_frame->width;
     matrix.height = dst_frame->height;
     matrix.data = (unsigned char *) malloc(matrix.width * matrix.height * N * sizeof(unsigned char));
+    data_size = matrix.width * matrix.height;
     frame_count = 0;
     t0 = cvGetTickCount();
     while (1) {
+        mdata = matrix.data;
         for (i = 0; i < N; i++) {
             src_frame = cvQueryFrame(capture);
             if (src_frame == NULL)
                 break;
             cvCvtColor(src_frame, image[i], CV_BGR2GRAY);
-            memcpy(matrix.data + matrix.width * matrix.height * i,
+            memcpy(mdata,
                    image[i]->imageData,
-                   matrix.width * matrix.height);
+                   data_size);
+            mdata += data_size;
         }
         if (src_frame == NULL)
             break;
         frame_count += N;
         procN(&matrix, &args);
+        mdata = matrix.data;
         for (i = 0; i < N; i++) {
             memcpy(image[i]->imageData,
-                   matrix.data + matrix.width * matrix.height * i,
-                   matrix.width * matrix.height);
+                   mdata,
+                   data_size);
             cvCvtColor(image[i], dst_frame, CV_GRAY2BGR);
             cvWriteFrame(writer, dst_frame);
+            mdata += data_size;
         }
     }
     t1 = cvGetTickCount();
