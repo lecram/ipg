@@ -59,9 +59,7 @@ main(int argc, char *argv[])
             if (src_frame == NULL)
                 break;
             cvCvtColor(src_frame, image[i], CV_BGR2GRAY);
-            memcpy(mdata,
-                   image[i]->imageData,
-                   data_size);
+            memcpy(mdata, image[i]->imageData, data_size);
             mdata += data_size;
         }
         if (src_frame == NULL)
@@ -70,9 +68,7 @@ main(int argc, char *argv[])
         procN(&matrix, &args);
         mdata = matrix.data;
         for (i = 0; i < N; i++) {
-            memcpy(image[i]->imageData,
-                   mdata,
-                   data_size);
+            memcpy(image[i]->imageData, mdata, data_size);
             cvCvtColor(image[i], dst_frame, CV_GRAY2BGR);
             cvWriteFrame(writer, dst_frame);
             mdata += data_size;
